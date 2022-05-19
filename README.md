@@ -7,7 +7,8 @@ I also make use of the passive buzzer by emitting an alarm tone when a session i
 ##  Materials needed:
 - One LCD1602 module;
 - 3 buttons;
-- One  10k Ohm potentiometer;
+- One 10k Ohm potentiometer;
+- (Optional) 2 220 Ohm resistors to reduce the god-awful sound of the buzzer;
 - A passive buzzer;
 - 2 Male-Female cables;
 - A hefty amount of Male-Male cables (I counted 25);
