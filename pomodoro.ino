@@ -21,6 +21,8 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 // duration of buzzer alarm
 #define ALARM_DURATION 1000
 
+#define REFRESH_DELTA 1000
+
 // states of the three buttons
 struct Button {
   // Initialize the states as HIGH, meaning the buttons were never pressed.
@@ -44,6 +46,9 @@ int MENU_STATE = 0;
 
 // don't force the display uselessly.
 bool DISPLAY_NEEDS_REFRESH = false;
+
+// flag for blinking
+bool BLINK_ART = false;
 
 // the default is 25 minutes
 unsigned long study_amount = 25;
@@ -119,7 +124,13 @@ void study_timer_ui() {
   lcd.setCursor(0, 0);
   lcd.print("   Studying");
   lcd.setCursor(12, 0);
-  lcd.write(byte(HEART));
+  
+  if (BLINK_ART == true)
+    lcd.write(byte(HEART));
+  else
+    lcd.print(" ");
+
+  BLINK_ART = !BLINK_ART;
   
   unsigned long current_time = millis();
   unsigned long delta_seconds = (current_time - start_time) / 1000;
@@ -159,7 +170,13 @@ void break_timer_ui() {
   lcd.setCursor(0, 0);
   lcd.print("   Relaxing");
   lcd.setCursor(12, 0);
-  lcd.write(byte(MUSICALNOTE));
+
+  if (BLINK_ART == true)
+    lcd.write(byte(MUSICALNOTE));
+  else
+    lcd.print(" ");
+
+  BLINK_ART = !BLINK_ART;
   
   unsigned long current_time = millis();
   unsigned long delta_seconds = (current_time - start_time) / 1000;
@@ -261,7 +278,7 @@ void loop() {
       }
       
       // Let's not force the lcd to refresh a lot
-      if (millis() - LAST_TIMER_REFRESH > 2500) {
+      if (millis() - LAST_TIMER_REFRESH > REFRESH_DELTA) {
         study_timer_ui();
       }
       break;
@@ -285,7 +302,7 @@ void loop() {
       }
       
       // Let's not force the lcd to refresh a lot
-      if (millis() - LAST_TIMER_REFRESH > 2500) {
+      if (millis() - LAST_TIMER_REFRESH > REFRESH_DELTA) {
         break_timer_ui();
       }
       break;
