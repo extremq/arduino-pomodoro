@@ -249,7 +249,7 @@ void loop() {
       }
       // increase study minutes by 1
       else if (r_button.pressed) {
-        study_amount = (study_amount + 1) % 55;
+        study_amount = (study_amount + 1) % 56;
         study_amount = (study_amount == 0 ? 1 : study_amount);
       }
 
