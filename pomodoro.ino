@@ -20,6 +20,7 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
 // duration of buzzer alarm
 #define ALARM_DURATION 1000
+#define CLICK_DURATION 100
 
 #define REFRESH_DELTA 1000
 
@@ -32,6 +33,7 @@ struct Button {
 
 // tone of alarm
 int alarm_tone = NOTE_C5;
+int click_tone = NOTE_C6;
 
 /*
  * MENU_STATE:
@@ -84,6 +86,10 @@ void clean_button(Button& button) {
 
 void playAlarmSound(int pitch) {
   tone(BUZZER, pitch, ALARM_DURATION);
+}
+
+void playClickSound(int pitch) {
+  tone(BUZZER, pitch, CLICK_DURATION);
 }
 
 void intro() {
@@ -255,6 +261,7 @@ void loop() {
 
       // for this menu, any button press requires an lcd update.
       if (l_button.pressed || c_button.pressed || r_button.pressed) {
+        playClickSound(click_tone);
         DISPLAY_NEEDS_REFRESH = true;
       }
       break;
@@ -264,6 +271,7 @@ void loop() {
         ask_study_ui();
 
       if (c_button.pressed) {
+        playClickSound(click_tone);
         MENU_STATE = 2;
         start_time = millis();
         DISPLAY_NEEDS_REFRESH = true;
@@ -288,6 +296,7 @@ void loop() {
         ask_break_ui();
 
       if (c_button.pressed) {
+        playClickSound(click_tone);
         MENU_STATE = 4;
         start_time = millis();
         DISPLAY_NEEDS_REFRESH = true;
