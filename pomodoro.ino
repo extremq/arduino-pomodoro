@@ -17,6 +17,7 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 #define MUSICALNOTE 0
 #define CHECKMARK 1
 #define HEART 2
+#define CANCEL 3
 
 // duration of buzzer alarm
 #define ALARM_DURATION 1000
@@ -154,6 +155,8 @@ void study_timer_ui() {
 
   temp = temp + String(remaining_seconds % 60, DEC);
 
+  lcd.setCursor(0, 1);
+  lcd.write(byte(CANCEL));
   lcd.setCursor(5, 1);
   lcd.print(temp);
   lcd.setCursor(15, 1);
@@ -200,6 +203,8 @@ void break_timer_ui() {
 
   temp = temp + String(remaining_seconds % 60, DEC);
 
+  lcd.setCursor(0, 1);
+  lcd.write(byte(CANCEL));
   lcd.setCursor(5, 1);
   lcd.print(temp);
   lcd.setCursor(15, 1);
@@ -222,6 +227,7 @@ void setup() {
   lcd.createChar(MUSICALNOTE, Sound);
   lcd.createChar(CHECKMARK, Check);
   lcd.createChar(HEART, Heart);
+  lcd.createChar(CANCEL, Cancel);
   lcd.clear();
   
   l_button.pin = L_BUTTON;
@@ -278,6 +284,12 @@ void loop() {
       }
       break;
     case 2:
+      // Send back to settings
+      if (l_button.pressed) {
+        playClickSound(click_tone);
+        MENU_STATE = 0;
+        DISPLAY_NEEDS_REFRESH = true;
+      }
       // This marks the end of a session
       if ((millis() - start_time >= study_amount * 60 * 1000) || r_button.pressed) {
         playAlarmSound(NOTE_C5);
@@ -303,6 +315,13 @@ void loop() {
       }
       break;
     case 4:
+      // Send back to settings
+      if (l_button.pressed) {
+        playClickSound(click_tone);
+        MENU_STATE = 0;
+        DISPLAY_NEEDS_REFRESH = true;
+      }
+      
       // This marks the end of a break
       if ((millis() - start_time >= break_amount * 60 * 1000) || r_button.pressed) {
         playAlarmSound(NOTE_C5);
